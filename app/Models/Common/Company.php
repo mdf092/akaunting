@@ -21,6 +21,10 @@ class Company extends Eloquent
 
     protected $fillable = ['domain', 'enabled'];
 
+    protected $casts = [
+        'enabled' => 'boolean',
+    ];
+
     /**
      * Sortable columns.
      *
@@ -315,6 +319,32 @@ class Company extends Eloquent
         return $query->join('settings', 'companies.id', '=', 'settings.company_id')
             ->where('key', 'company.email')
             ->orderBy('value', $direction)
+            ->select('companies.*');
+    }
+
+    /**
+     * Scope autocomplete.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param array $filter
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeAutocomplete($query, $filter)
+    {
+        return $query->join('settings', 'companies.id', '=', 'settings.company_id')
+            ->where(function ($query) use ($filter) {
+                foreach ($filter as $key => $value) {
+                    $column = $key;
+
+                    if (!in_array($key, $this->fillable)) {
+                        $column = 'company.' . $key;
+                        $query->orWhere('key', $column);
+                        $query->Where('value', 'LIKE', "%" . $value  . "%");
+                    } else {
+                        $query->orWhere($column, 'LIKE', "%" . $value  . "%");
+                    }
+                }
+            })
             ->select('companies.*');
     }
 

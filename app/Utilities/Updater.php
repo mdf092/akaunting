@@ -2,13 +2,13 @@
 
 namespace App\Utilities;
 
+use App\Events\Install\UpdateCacheCleared;
 use App\Events\Install\UpdateCopied;
 use App\Events\Install\UpdateDownloaded;
 use App\Events\Install\UpdateUnzipped;
 use App\Models\Module\Module;
 use App\Utilities\Console;
 use App\Traits\SiteApi;
-use Artisan;
 use Cache;
 use Date;
 use File;
@@ -21,7 +21,10 @@ class Updater
 
     public static function clear()
     {
-        Artisan::call('cache:clear');
+        Cache::forget('updates');
+        Cache::forget('versions');
+
+        event(new UpdateCacheCleared(session('company_id')));
 
         return true;
     }
@@ -161,7 +164,17 @@ class Updater
         $versions = Versions::all($modules);
 
         foreach ($versions as $alias => $latest_version) {
-            $installed_version = ($alias == 'core') ? version('short') : module($alias)->get('version');
+            if ($alias == 'core') {
+                $installed_version = version('short');
+            } else {
+                $module = module($alias);
+
+                if (!$module instanceof \Akaunting\Module\Module) {
+                    continue;
+                }
+
+                $installed_version = $module->get('version');
+            }
 
             if (version_compare($installed_version, $latest_version, '>=')) {
                 continue;

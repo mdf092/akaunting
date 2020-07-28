@@ -4,12 +4,12 @@ namespace App\Models\Banking;
 
 use App\Abstracts\Model;
 use App\Models\Setting\Category;
+use App\Models\Setting\Currency;
 use App\Traits\Currencies;
 use App\Traits\DateTime;
 use App\Traits\Media;
 use App\Traits\Recurring;
 use Bkwld\Cloner\Cloneable;
-use Date;
 
 class Transaction extends Model
 {
@@ -218,6 +218,11 @@ class Transaction extends Model
         return $query->where('reconciled', 0);
     }
 
+    public function onCloning($src, $child = null)
+    {
+        $this->document_id = null;
+    }
+
     /**
      * Convert amount to double.
      *
@@ -238,6 +243,26 @@ class Transaction extends Model
     public function setCurrencyRateAttribute($value)
     {
         $this->attributes['currency_rate'] = (double) $value;
+    }
+
+    /**
+     * Convert amount to double.
+     *
+     * @return float
+     */
+    public function getAmountForAccountAttribute()
+    {
+        $amount = $this->amount;
+
+        // Convert amount if not same currency
+        if ($this->account->currency_code != $this->currency_code) {
+            $to_code = $this->account->currency_code;
+            $to_rate = config('money.' . $this->account->currency_code . '.rate');
+
+            $amount = $this->convertBetween($amount, $this->currency_code, $this->currency_rate, $to_code, $to_rate);
+        }
+
+        return $amount;
     }
 
     /**

@@ -13,6 +13,7 @@ return [
     'price'                 => 'Preço',
     'sub_total'             => 'Subtotal',
     'discount'              => 'Desconto',
+    'item_discount'         => 'Line Discount',
     'tax_total'             => 'Imposto',
     'total'                 => 'Total',
 
@@ -27,9 +28,10 @@ return [
     'paid'                  => 'Pago',
     'histories'             => 'Histórico',
     'payments'              => 'Pagamentos',
-    'add_payment'           => 'Pagar Conta',
-    'mark_paid'             => 'Mark Paid',
+    'add_payment'           => 'Adicionar Pagamento',
+    'mark_paid'             => 'Marcar como Paga',
     'mark_received'         => 'Marcar como Recebida',
+    'mark_cancelled'        => 'Marcar como Cancelada',
     'download_pdf'          => 'Transferir em PDF',
     'send_mail'             => 'Enviar e-mail',
     'create_bill'           => 'Criar Conta',
@@ -43,18 +45,20 @@ return [
         'paid'              => 'Paga',
         'overdue'           => 'Vencida',
         'unpaid'            => 'Por Pagar',
+        'cancelled'         => 'Cancelada',
     ],
 
     'messages' => [
-        'received'          => 'Conta marcada como recebida com sucesso!',
-        'marked_paid'       => 'Bill marked as paid!',
+        'marked_received'   => 'Conta marcada como recebida!',
+        'marked_paid'       => 'Conta marcada como paga!',
+        'marked_cancelled'  => 'Conta marcada como cancelada!',
         'draft'             => 'Isto é um <b>RASCUNHO</b> da conta e será refletida nos gráficos depois de recebida.',
 
         'status' => [
-            'created'       => 'Criado em :date',
+            'created'       => 'Criada em :date',
             'receive' => [
-                'draft'     => 'Não enviado',
-                'received'  => 'Recebido em :date',
+                'draft'     => 'Não Recebida',
+                'received'  => 'Recebida em :date',
             ],
             'paid' => [
                 'await'     => 'Aguarda pagamento',

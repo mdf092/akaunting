@@ -165,20 +165,6 @@ button:focus {
     overflow: hidden;
 }
 
-/*--------Customer/Vendor Show--------*/
-.show-transaction-card-header {
-    padding: 1.14rem;
-}
-
-.show-transaction-card-footer {
-    padding: 1.15rem;
-}
-
-.edit-sv {
-    margin-bottom: 30px;
-}
-/*--------Customer/Vendor Show Finish--------*/
-
 /*--------Navbar Notification--------*/
 .nav-link .badge-update {
     position: absolute;
@@ -274,6 +260,13 @@ tbody .row {
     height: 38px;
 }
 /*--------Item Column Image Finish--------*/
+
+/*--------User Column Image--------*/
+.user-img {
+    width: 36px;
+    height: 36px;
+}
+/*--------User Column Image Finish--------*/
 
 /*--------Border--------*/
 .border-1 {
@@ -438,14 +431,6 @@ tbody .row {
 /*--------Shadow None Focus Finish--------*/
 /*--------Settings Index Page Finish--------*/
 
-/*--------Pagination Alignment--------*/
-.page-item .page-link,
-.page-item span {
-    align-items: unset;
-    padding-top: 7px;
-}
-/*--------Pagination Alignment Finish--------*/
-
 /*--------Avatar Size--------*/
 .avatar-size {
     width: 128px;
@@ -543,7 +528,6 @@ table .align-items-center td span.badge {
 /*--------App Comment--------*/
 .media-comment-text {
     border-top-left-radius: 0.4375rem;
-    background-color: #ebebf0;
     padding: 1rem;
 }
 /*--------App Comment Finish--------*/
@@ -827,4 +811,8 @@ table .align-items-center td span.badge {
 
 .navbar-vertical .navbar-nav .nav-link:not(.active) {
     color: #fff !important;
+}
+
+.form-group.has-error .el-input__inner {
+    border-color: #ef3232 !important;
 }

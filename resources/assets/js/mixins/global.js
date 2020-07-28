@@ -56,6 +56,10 @@ export default {
 
     mounted() {
         this.checkNotify();
+
+        if (aka_currency) {
+            this.currency = aka_currency;
+        }
     },
 
     methods: {
@@ -184,10 +188,10 @@ export default {
                 }
               })
             .then(response => {
+                this.currency = response.data;
+
                 this.form.currency_code = response.data.currency_code;
                 this.form.currency_rate = response.data.currency_rate;
-
-                this.currency = response.data;
             })
             .catch(error => {
             });
@@ -306,6 +310,80 @@ export default {
             })
             .finally(function () {
                 // always executed
+            });
+        },
+
+        // Delete attachment file
+        onDeleteFile(file_id, url, title, message, button_cancel, button_delete) {
+            let file_data = {
+                page: null,
+                key: null,
+                value: null,
+                ajax: true,
+                redirect: window.location.href 
+            };
+
+            if (this.form['page' +  file_id]) {
+                file_data.page = this.form['page' +  file_id];
+            }
+
+            if (this.form['key' +  file_id]) {
+                file_data.key = this.form['key' +  file_id];
+            }
+
+            if (this.form['value' +  file_id]) {
+                file_data.value = this.form['value' +  file_id];
+            }
+
+            let confirm = {
+                url: url,
+                title: title,
+                message: message,
+                button_cancel: button_cancel,
+                button_delete: button_delete,
+                file_data: file_data,
+                show: true
+            };
+
+            this.component = Vue.component('add-new-component', (resolve, reject) => {
+                resolve({
+                    template : '<div id="dynamic-component"><akaunting-modal v-if="confirm.show" :show="confirm.show" :title="confirm.title" :message="confirm.message" :button_cancel="confirm.button_cancel" :button_delete="confirm.button_delete" @confirm="onDelete" @cancel="cancelDelete"></akaunting-modal></div>',
+
+                    components: {
+                        AkauntingModal,
+                    },
+
+                    data: function () {
+                        return {
+                            confirm: confirm,
+                        }
+                    },
+
+                    methods: {
+                        // Delete action post
+                       async onDelete() {
+                            let promise = Promise.resolve(axios({
+                                method: 'DELETE',
+                                url: this.confirm.url,
+                                data: file_data
+                            }));
+
+                            promise.then(response => {
+                                if (response.data.redirect) {
+                                    window.location.href = response.data.redirect;
+                                }
+                            })
+                            .catch(error => {
+                                this.success = false;
+                            });
+                        },
+
+                        // Close modal empty default value
+                        cancelDelete() {
+                            this.confirm.show = false;
+                        },
+                    }
+                })
             });
         },
     }

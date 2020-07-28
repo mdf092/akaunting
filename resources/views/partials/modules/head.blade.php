@@ -30,8 +30,9 @@
 
     <script type="text/javascript"><!--
         var url = '{{ url("/") }}';
-        var app_home = '{{ route("apps.home") }}';
+        var app_home = '{{ route("apps.home.index") }}';
         var app_url = '{{ config("app.url") }}';
+        var aka_currency = {!! !empty($currency) ? $currency : 'false' !!};
     //--></script>
 
     @stack('js')
